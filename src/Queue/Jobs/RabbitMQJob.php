@@ -110,7 +110,7 @@ class RabbitMQJob extends Job implements JobContract
     /** {@inheritdoc}
      * @throws Exception
      */
-    public function release($delay = 0): void
+    public function release($delay = 0, $incrementAttempts = true): void
     {
         parent::release($delay);
 
@@ -129,7 +129,12 @@ class RabbitMQJob extends Job implements JobContract
 
         $data = $body['data'];
 
-        $this->connection->release($delay, $job, $data, $this->getQueue(), $this->attempts() + 1);
+        $attempts = $this->attempts();
+        if ($incrementAttempts) {
+            $attempts++;
+        }
+
+        $this->connection->release($delay, $job, $data, $this->getQueue(), $attempts);
     }
 
     /**
