@@ -104,7 +104,7 @@ class RabbitMQJob extends Job implements JobContract
     /** {@inheritdoc}
      * @throws Exception
      */
-    public function release($delay = 0): void
+    public function release($delay = 0, $incrementAttempts = true): void
     {
         parent::release($delay);
 
